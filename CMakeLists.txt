@@ -16,25 +16,39 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(gazebo_joint_torsional_spring)
 
+# Set CMP0054
+cmake_policy(SET CMP0054 NEW)
+
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS 
-  roscpp 
-  gazebo_ros 
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  gazebo_ros
 )
 
 # Depend on system install of Gazebo
 find_package(gazebo REQUIRED)
+# Gazebo cxx flags should have all the required C++ flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
-link_directories(${GAZEBO_LIBRARY_DIRS})
-include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
-
-list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
-
-add_library(${PROJECT_NAME} src/gazebo_joint_torsional_spring.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+find_package(Boost REQUIRED)
 
 catkin_package(
-  DEPENDS 
-    roscpp 
-    gazebo_ros 
+  DEPENDS
+    roscpp
+    gazebo_ros
+)
+
+link_directories(${GAZEBO_LIBRARY_DIRS})
+include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} include)
+
+add_library(gazebo_joint_torsional_spring src/gazebo_joint_torsional_spring.cpp)
+target_link_libraries(gazebo_joint_torsional_spring ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+install(TARGETS gazebo_joint_torsional_spring
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(DIRECTORY include/${PROJECT_NAME}
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
