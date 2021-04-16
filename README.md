@@ -1,6 +1,6 @@
 # Gazebo Joint Torsional Spring Plugin 
 
-This Gazebo/ROS plugin allows you to easily add a torsional spring to your robot in Gazebo.
+This Gazebo/ROS plugin allows you to easily add a torsional spring to your robot in Gazebo. It supports Gazebo 9+ (ROS Noetic)
 
 ### Installation
 
